@@ -1,0 +1,25 @@
+{
+  "name": "courseselling_backend",
+  "version": "1.0.0",
+  "description": "just practicing ... #COURSE_SELLING_BACKEND",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thoubaa/courseSelling_BACKEND.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thoubaa/courseSelling_BACKEND/issues"
+  },
+  "homepage": "https://github.com/Thoubaa/courseSelling_BACKEND#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0"
+  }
+}
