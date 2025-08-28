@@ -1,23 +1,19 @@
 const express = require('express');
+const {userRouter} = require("./routes/user")
+const {courseRouter} = require("./routes/course")
+
 const app = express();
 
-app.post("/user/signup",(req,res)=>{
-    res.send("Signed up")
-})
-app.post("/user/signin",(req,res)=>{
-    res.send("Signed in")
-})
 
-app.get("/user/purchased",(req,res)=>{
-    res.send("Purchase items")
-})
+app.use("/user",userRouter)
+app.use("/course",courseRouter)
 
-app.post("/course/purchase",(req,res)=>{
-    res.send("Purchased")
-})
-app.get("/user/signup",(req,res)=>{
-    res.send("Courses")
-})
+
+
+
+
+
+
 
 app.listen(3000,()=>{
     console.log("Course Selling Backend is online");
