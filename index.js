@@ -6,17 +6,18 @@ const mongoose = require("mongoose")
 require("dotenv").config()
 
 const app = express();
+app.use(express.json());
 
 
 app.use("/user",userRouter)
 app.use("/course",courseRouter)
-app.use("admin",adminRouter)
+app.use("/admin",adminRouter)
 
 
 
 async function main(){
-    await mongoose.connect(MONGO_URI)
-    app.listen(PORT)
+    await mongoose.connect(process.env.MONGO_URI)
+    app.listen(process.env.PORT)
     console.log("DB connected and Backend running on port 3000")
 }
 
