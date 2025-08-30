@@ -1,20 +1,20 @@
-const {z} = require("zod")
 const jwt = require("jsonwebtoken");
+const {z} = require("zod")
 
 
-function userAuth(req,res,next){
+
+function adminAuth(req,res,next){
     const authHeader = req.headers.token;
-    const decoded = jwt.verify(authHeader, process.env.USER_SECRET_KEY);
+   try{ const decoded = jwt.verify(authHeader, process.env.ADMIN_SECRET_KEY);
     if(decoded){
         req.userId = decoded.userId;
         next();
-    } else{
-        res.status(401).send("Please login first")
+    } }catch(e){
+        res.status(401).send("Please login first: ")
     }
 }
 
-
-const userSchema = z.object({
+const adminSchema = z.object({
     email: z.email(),
     password: z.string().min(8,"password must be atleast 8 characters").regex(/[A-Za-z]/,"password must contain letters").regex(/[0-9]/,"password must contain numbers"),
     firstName: z.string().min(3,"first name is required").max(50).trim(),
@@ -22,4 +22,4 @@ const userSchema = z.object({
 
 })
 
-module.exports = {userSchema, userAuth };
+module.exports = {adminSchema, adminAuth };

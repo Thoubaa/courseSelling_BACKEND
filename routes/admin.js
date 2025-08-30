@@ -2,10 +2,13 @@ const {Router} = require("express");
 const { adminModel } = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {adminAuth,adminSchema } = require("../middlewares/adminValidation")
+const {validateBody} = require("../middlewares/bodyValidator")
+const {courseModel} = require("../db")
 
 const adminRouter=Router();
 
-adminRouter.post("/signup",async (req,res)=>{
+adminRouter.post("/signup",validateBody(adminSchema),async (req,res)=>{
      const {email, firstName, lastName, password} = req.body;
     const hashpassword = await bcrypt.hash(password,10);
     try{await adminModel.create({
@@ -32,18 +35,37 @@ adminRouter.post("/signin",async(req,res)=>{
         }
 })
 
-adminRouter.get("/allCourse",(req,res)=>{
-    res.send("All course")
+adminRouter.get("/allCourse",adminAuth,async (req,res)=>{
+    const adminId = req.userId;
+    const course = await courseModel.find({creatorId: adminId})
+    if(course.length>0){
+        res.send({message:"Courses found: ", course})
+    } else{
+        res.send("No course found")
+    }
 })
 
 
-adminRouter.post("/course",(req,res)=>{
-    res.send("course posted")
+adminRouter.post("/course",adminAuth,async (req,res)=>{
+    const adminId = req.userId;
+    const {title, description, price, imageUrl} = req.body;
+    const course = await courseModel.create({title, description, price, imageUrl, creatorId: adminId})
+
+    res.send({message: "Course created successfully", courseId: course._id})
+
 })
 
 
-adminRouter.put("/updateCourse",(req,res)=>{
-    res.send("All course")
+adminRouter.put("/updateCourse",adminAuth,async (req,res)=>{
+    const adminId = req.userId;
+    const {courseId, title, description, price, imageUrl} = req.body;
+
+    const course = await courseModel.updateOne({_id: courseId,creatorId: adminId}, {title, description, price, imageUrl})
+    if(course.modifiedCount>0){
+        res.send({message: "Course updated successfully", courseId: course._id})}
+    else{
+        res.send("Course not found or you are not authorized to update this course")
+    }
 })
 
 module.exports={

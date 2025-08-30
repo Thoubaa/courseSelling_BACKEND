@@ -1,6 +1,6 @@
 const {Router} = require("express")
 const {validateBody} = require("../middlewares/bodyValidator")
-const {userSchema} = require("../middlewares/userValidation") 
+const {userSchema, userAuth} = require("../middlewares/userValidation") 
 const bcrypt = require("bcrypt")
 const {userModel} = require("../db")
 const jwt = require("jsonwebtoken")
@@ -38,7 +38,7 @@ userRouter.post("/signin",async (req,res)=>{
 
 
 
-userRouter.get("/purchased",(req,res)=>{
+userRouter.get("/purchased",userAuth,(req,res)=>{
     res.send("Purchase items")
 })
 
