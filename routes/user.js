@@ -3,6 +3,7 @@ const {validateBody} = require("../middlewares/bodyValidator")
 const {userSchema} = require("../middlewares/userValidation") 
 const bcrypt = require("bcrypt")
 const {userModel} = require("../db")
+const jwt = require("jsonwebtoken")
 
 const userRouter=Router();
 
@@ -27,10 +28,12 @@ userRouter.post("/signin",async (req,res)=>{
     if(user){
         const matchPassword =await bcrypt.compare(password, user.password)
         if(!matchPassword) return res.send("Invalid email or password")
+        const token = jwt.sign({userId: user._id},process.env.USER_SECRET_KEY);
+        res.send({Message: "Signed in" ,token: token})
+    } else{ return res.send("User not found")
+        }
+
     
-    } else{ return res.send("Invalid email or password")
-}
-    res.send("Signed in")
 })
 
 
