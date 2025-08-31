@@ -38,8 +38,10 @@ userRouter.post("/signin",async (req,res)=>{
 
 
 
-userRouter.get("/purchased",userAuth,(req,res)=>{
-    res.send("Purchase items")
+userRouter.get("/purchased",userAuth,async (req,res)=>{
+    const userId = req.userId;
+    const purchasedCourses = await purchaseModel.find({userId});
+    res.send({message: "Purchased courses", purchasedCourses});
 })
 
 
